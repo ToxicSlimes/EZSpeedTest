@@ -1,0 +1,20 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{cs,csx}]
+indent_style = space
+indent_size = 4
+
+[*.{js,jsx,ts,tsx,json,html,css}]
+indent_style = space
+indent_size = 2
+
+[*.cs]
+dotnet_diagnostic.IDE0060.severity = warning
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion

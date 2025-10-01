@@ -1,0 +1,42 @@
+{
+  "name": "speedtest-electron",
+  "private": true,
+  "version": "0.1.0",
+  "main": "dist/main.js",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "concurrently -n MAIN,PRELOAD,RENDERER,ELECTRON \"npm:dev:main\" \"npm:dev:preload\" \"npm:dev:renderer\" \"npm:dev:electron\"",
+    "dev:main": "esbuild src/main.ts --bundle --platform=node --format=cjs --external:electron --outfile=dist/main.js --sourcemap --watch",
+    "dev:preload": "esbuild src/preload.ts --bundle --platform=node --format=cjs --external:electron --outfile=dist/preload.js --sourcemap --watch",
+    "dev:renderer": "vite build --watch",
+    "dev:electron": "wait-on file:dist/main.js file:dist/renderer/index.html && electron .",
+    "build": "rimraf dist && esbuild src/main.ts --bundle --platform=node --format=cjs --external:electron --outfile=dist/main.js && esbuild src/preload.ts --bundle --platform=node --format=cjs --external:electron --outfile=dist/preload.js && vite build",
+    "pack": "npm run build && electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^38.2.0",
+    "electron-builder": "^25.1.8",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.0",
+    "concurrently": "^9.0.1",
+    "wait-on": "^7.2.0",
+    "cross-env": "^7.0.3",
+    "esbuild": "^0.23.1",
+    "rimraf": "^6.0.1"
+  },
+  "dependencies": {},
+  "build": {
+    "appId": "com.ezspeedtest.app",
+    "productName": "EZSpeedTest",
+    "files": [
+      "dist/**",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "build"
+    },
+    "win": { "target": ["nsis", "zip"] },
+    "mac": { "target": ["dmg", "zip"] },
+    "linux": { "target": ["AppImage", "deb"] }
+  }
+}
