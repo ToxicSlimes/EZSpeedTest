@@ -11,7 +11,12 @@
     "dev:renderer": "vite build --watch",
     "dev:electron": "wait-on file:dist/main.js file:dist/renderer/index.html && electron .",
     "build": "rimraf dist && esbuild src/main.ts --bundle --platform=node --format=cjs --external:electron --outfile=dist/main.js && esbuild src/preload.ts --bundle --platform=node --format=cjs --external:electron --outfile=dist/preload.js && vite build",
-    "pack": "npm run build && electron-builder"
+    "build:prod": "npm run build",
+    "pack": "npm run build:prod && electron-builder",
+    "pack:win": "npm run build:prod && electron-builder --win",
+    "pack:mac": "npm run build:prod && electron-builder --mac",
+    "pack:linux": "npm run build:prod && electron-builder --linux",
+    "dist": "npm run pack"
   },
   "devDependencies": {
     "electron": "^38.2.0",
@@ -27,16 +32,60 @@
   "dependencies": {},
   "build": {
     "appId": "com.ezspeedtest.app",
-    "productName": "EZSpeedTest",
+    "productName": "EZ Speed Test",
+    "copyright": "Copyright © 2025 EZ Speed Test",
     "files": [
       "dist/**",
-      "package.json"
+      "package.json",
+      "!dist/**/*.map"
     ],
     "directories": {
-      "buildResources": "build"
+      "buildResources": "build",
+      "output": "release"
     },
-    "win": { "target": ["nsis", "zip"] },
-    "mac": { "target": ["dmg", "zip"] },
-    "linux": { "target": ["AppImage", "deb"] }
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "icon": "build/icon.icns",
+      "category": "public.app-category.utilities"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        },
+        {
+          "target": "deb",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "build/icon.png",
+      "category": "Network"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
   }
 }

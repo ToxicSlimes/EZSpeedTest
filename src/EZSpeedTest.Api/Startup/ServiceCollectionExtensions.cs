@@ -1,6 +1,8 @@
-using Serilog;
-using MediatR;
+using EZSpeedTest.Application;
+using EZSpeedTest.Infrastructure;
 using FluentValidation;
+using MediatR;
+using Serilog;
 using System.Reflection;
 
 namespace EZSpeedTest.Api.Startup;
@@ -12,8 +14,12 @@ public static class ServiceCollectionExtensions
         Log.Logger = new LoggerConfiguration()
             .ReadFrom.Configuration(builder.Configuration)
             .Enrich.FromLogContext()
-            .WriteTo.Console()
-            .WriteTo.File("logs/app-.log", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7)
+            .Enrich.WithProperty("Application", "EZSpeedTest.Api")
+            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] [{CorrelationId}] {Message:lj}{NewLine}{Exception}")
+            .WriteTo.File("logs/app-.log",
+                rollingInterval: RollingInterval.Day,
+                retainedFileCountLimit: 7,
+                outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] [{CorrelationId}] {Message:lj}{NewLine}{Exception}")
             .CreateLogger();
 
         builder.Host.UseSerilog();
@@ -26,8 +32,6 @@ public static class ServiceCollectionExtensions
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-        services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
 
         services.AddCors(options =>
         {
@@ -37,7 +41,9 @@ public static class ServiceCollectionExtensions
                  .AllowAnyMethod());
         });
 
-        // Optional Electron dev service (config-gated)
+        services.AddApplication();
+        services.AddInfrastructure(configuration);
+
         var enableElectronDev = configuration.GetValue<bool>("Electron:AutoStartDev");
         if (enableElectronDev && env.IsDevelopment())
         {

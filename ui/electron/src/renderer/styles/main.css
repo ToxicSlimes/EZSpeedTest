@@ -1,0 +1,244 @@
+/* Main styles for EZ Speed Test */
+
+* {
+  box-sizing: border-box;
+}
+
+body { 
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; 
+  margin: 0; 
+  padding: 20px; 
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  color: #fff; 
+  min-height: 100vh;
+}
+
+.container { 
+  max-width: 900px; 
+  margin: 0 auto; 
+}
+
+h1 { 
+  margin-top: 0; 
+  text-align: center; 
+  font-size: 2.5em; 
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  margin-bottom: 30px;
+}
+
+h3 { 
+  color: #e0e0e0; 
+  border-bottom: 2px solid #4a90e2; 
+  padding-bottom: 8px; 
+  margin-top: 0;
+}
+
+h4 { 
+  color: #ccc; 
+  margin-top: 0;
+}
+
+/* Sections */
+.server-section, 
+.test-section, 
+.results-section, 
+.legacy-section {
+  background: rgba(255,255,255,0.1); 
+  padding: 20px; 
+  margin: 20px 0; 
+  border-radius: 12px; 
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Form elements */
+select, button { 
+  padding: 12px 16px; 
+  border-radius: 8px; 
+  border: 1px solid rgba(255,255,255,0.3); 
+  background: rgba(255,255,255,0.2); 
+  color: #fff; 
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+select:focus,
+button:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.3);
+}
+
+button:hover:not(:disabled) { 
+  background: rgba(255,255,255,0.3); 
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+button:active:not(:disabled) { 
+  transform: translateY(0); 
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+select { 
+  min-width: 250px; 
+  margin-right: 10px; 
+}
+
+/* Test buttons */
+.server-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.test-buttons { 
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.test-buttons button { 
+  min-height: 45px;
+}
+
+/* Results */
+.results { 
+  background: rgba(0,0,0,0.4); 
+  padding: 20px; 
+  border-radius: 8px; 
+  min-height: 120px;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  white-space: pre-wrap;
+  border: 1px solid rgba(255,255,255,0.2);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.results:empty::before {
+  content: "No results yet. Run a test to see results here.";
+  color: rgba(255,255,255,0.5);
+  font-style: italic;
+}
+
+/* Loading */
+.loading { 
+  text-align: center; 
+  font-style: italic; 
+  color: #4a90e2;
+  animation: pulse 1.5s infinite;
+  padding: 20px;
+  font-size: 16px;
+}
+
+.hidden { 
+  display: none !important; 
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Status colors */
+.success { 
+  color: #4CAF50; 
+  font-weight: 500;
+}
+
+.error { 
+  color: #f44336; 
+  font-weight: 500;
+}
+
+.info { 
+  color: #2196F3; 
+  font-weight: 500;
+}
+
+.warning {
+  color: #FF9800;
+  font-weight: 500;
+}
+
+/* Legacy section */
+#legacyOut { 
+  background: #111; 
+  color: #0f0; 
+  padding: 15px; 
+  border-radius: 8px; 
+  min-height: 80px;
+  font-size: 12px;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  border: 1px solid #333;
+  margin-top: 10px;
+}
+
+/* Connection status */
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 15px;
+  padding: 10px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.status-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #f44336;
+  animation: pulse 2s infinite;
+}
+
+.status-indicator.connected {
+  background: #4CAF50;
+  animation: none;
+}
+
+.status-indicator.connecting {
+  background: #FF9800;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+  
+  .container {
+    max-width: 100%;
+  }
+  
+  h1 {
+    font-size: 2em;
+  }
+  
+  .server-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  select {
+    min-width: auto;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+  
+  .test-buttons {
+    grid-template-columns: 1fr;
+  }
+}

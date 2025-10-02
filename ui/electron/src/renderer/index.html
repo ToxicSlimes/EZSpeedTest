@@ -1,21 +1,61 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta http-equiv="Content-Security-Policy"
           content="default-src 'self'; connect-src http://localhost:* https://localhost:*; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'">
     <meta charset="utf-8" />
-    <title>SpeedTest</title>
-    <style>
-      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 24px; }
-      #out { background:#111; color:#0f0; padding:12px; border-radius:8px; min-height:120px; }
-      button { padding:8px 14px; border-radius:8px; border:1px solid #444; background:#222; color:#fff; cursor:pointer; }
-      h1 { margin-top:0; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EZ Speed Test</title>
+    <link rel="stylesheet" href="./styles/main.css" />
   </head>
   <body>
-    <h1>SpeedTest</h1>
-    <button id="btn">Ping API</button>
-    <pre id="out">Click the button to ping API...</pre>
+    <div class="container">
+      <h1>🚀 EZ Speed Test</h1>
+      
+      <!-- Connection Status -->
+      <div class="connection-status">
+        <div class="status-indicator" id="connectionStatus"></div>
+        <span id="connectionText">Connecting to API...</span>
+      </div>
+      
+      <!-- Server Selection -->
+      <div class="server-section">
+        <h3>📡 Select Server</h3>
+        <div class="server-controls">
+          <select id="serverSelect" disabled>
+            <option value="">Loading servers...</option>
+          </select>
+          <button id="refreshServers" disabled>🔄 Refresh</button>
+        </div>
+      </div>
+
+      <!-- Speed Tests -->
+      <div class="test-section">
+        <h3>⚡ Speed Tests</h3>
+        <div class="test-buttons">
+          <button id="pingBtn" disabled>🏓 Ping Test</button>
+          <button id="downloadBtn" disabled>📥 Download Test</button>
+          <button id="fullTestBtn" disabled>🚀 Full Test</button>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="results-section">
+        <h3>📊 Results</h3>
+        <div id="loading" class="loading hidden">
+          <div>⏳ Testing in progress...</div>
+          <div style="font-size: 12px; margin-top: 5px;">Please wait while we measure your connection speed</div>
+        </div>
+        <div id="results" class="results"></div>
+      </div>
+
+      <!-- Debug Section -->
+      <div class="legacy-section">
+        <h4>🔧 Debug & Health Check</h4>
+        <button id="legacyBtn">🩺 Health Check</button>
+        <pre id="legacyOut">Click to test API health endpoint...</pre>
+      </div>
+    </div>
     <script type="module" src="./index.ts"></script>
   </body>
 </html>

@@ -1,0 +1,52 @@
+### Quick API Tests
+### Make sure API is running on http://localhost:5299
+
+### 1. Health Check
+GET http://localhost:5299/healthz
+
+###
+
+### 2. Get Servers
+GET http://localhost:5299/api/v1/speed/servers
+
+###
+
+### 3. Ping Google DNS
+POST http://localhost:5299/api/v1/speed/ping
+Content-Type: application/json
+
+{
+  "host": "8.8.8.8"
+}
+
+###
+
+### 4. Ping Cloudflare DNS
+POST http://localhost:5299/api/v1/speed/ping
+Content-Type: application/json
+
+{
+  "host": "1.1.1.1"
+}
+
+###
+
+### 5. Download Test
+POST http://localhost:5299/api/v1/speed/download
+Content-Type: application/json
+
+{
+  "serverUrl": "https://www.google.com"
+}
+
+###
+
+### 6. Full Test
+POST http://localhost:5299/api/v1/speed/run
+Content-Type: application/json
+
+{
+  "serverUrl": "https://www.google.com"
+}
+
+###

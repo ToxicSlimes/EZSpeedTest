@@ -1,7 +1,10 @@
+using EZSpeedTest.Domain.Models;
+
 namespace EZSpeedTest.Application.SpeedTest;
 
 public interface ISpeedTestService
 {
-    Task<double> MeasureDownloadMbpsAsync(CancellationToken ct = default);
-    Task<double> MeasureUploadMbpsAsync(CancellationToken ct = default);
+    Task<PingResult> MeasurePingAsync(string host, CancellationToken cancellationToken = default);
+    Task<DownloadResult> MeasureDownloadAsync(Uri url, CancellationToken cancellationToken = default);
+    Task<SpeedTestResult> RunFullTestAsync(SpeedTestServer server, CancellationToken cancellationToken = default);
 }

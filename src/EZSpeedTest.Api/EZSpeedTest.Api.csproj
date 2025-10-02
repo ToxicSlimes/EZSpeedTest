@@ -15,11 +15,24 @@
     <PackageReference Include="Swashbuckle.AspNetCore" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
     <PackageReference Include="MediatR" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EZSpeedTest.Application\EZSpeedTest.Application.csproj" />
     <ProjectReference Include="..\EZSpeedTest.Infrastructure\EZSpeedTest.Infrastructure.csproj" />
   </ItemGroup>
+
+  <!-- Pre-build event to kill any running instances of this specific project -->
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="powershell -Command &quot;Get-Process -Name 'EZSpeedTest.Api' -ErrorAction SilentlyContinue | Stop-Process -Force&quot;" 
+          ContinueOnError="true" />
+    <Exec Command="powershell -Command &quot;Get-Process -Name 'dotnet' -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -like '*EZSpeedTest*' } | Stop-Process -Force&quot;" 
+          ContinueOnError="true" />
+    <Exec Command="powershell -Command &quot;Get-Process -Name 'electron' -ErrorAction SilentlyContinue | Stop-Process -Force&quot;" 
+          ContinueOnError="true" />
+    <Exec Command="powershell -Command &quot;Get-Process -Name 'node' -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -like '*speedtest-electron*' } | Stop-Process -Force&quot;" 
+          ContinueOnError="true" />
+  </Target>
 
 </Project>

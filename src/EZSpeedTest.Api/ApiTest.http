@@ -1,0 +1,337 @@
+### EZ Speed Test API - Test Requests
+### Base URL: http://localhost:5299
+
+### Health Check
+GET http://localhost:5299/healthz
+Accept: application/json
+
+###
+
+### Get Available Servers
+GET http://localhost:5299/api/v1/speed/servers
+Accept: application/json
+X-Correlation-ID: test-{{$timestamp}}
+
+###
+
+### Ping Test - Google DNS
+POST http://localhost:5299/api/v1/speed/ping
+Content-Type: application/json
+X-Correlation-ID: test-{{$timestamp}}
+
+{
+  "host": "8.8.8.8"
+}
+
+###
+
+### Ping Test - Cloudflare DNS
+POST http://localhost:5299/api/v1/speed/ping
+Content-Type: application/json
+X-Correlation-ID: test-{{$timestamp}}
+
+{
+  "host": "1.1.1.1"
+}
+
+###
+
+### Ping Test - Invalid Host (should fail)
+POST http://localhost:5299/api/v1/speed/ping
+Content-Type: application/json
+X-Correlation-ID: test-{{$timestamp}}
+
+{
+  "host": "999.999.999.999"
+}
+
+###
+
+### Download Test - Google
+POST http://localhost:5299/api/v1/speed/download
+Content-Type: application/json
+X-Correlation-ID: test-{{$timestamp}}
+
+{
+  "serverUrl": "https://www.google.com"
+}
+
+###
+
+### Download Test - Cloudflare
+POST http://localhost:5299/api/v1/speed/download
+Content-Type: application/json
+X-Correlation-ID: test-{{$timestamp}}
+
+{
+  "serverUrl": "https://www.cloudflare.com"
+}
+
+###
+
+### Full Speed Test - Google
+POST http://localhost:5299/api/v1/speed/run
+Content-Type: application/json
+X-Correlation-ID: test-{{$timestamp}}
+
+{
+  "serverUrl": "https://www.google.com"
+}
+
+###
+
+### Full Speed Test - Cloudflare
+POST http://localhost:5299/api/v1/speed/run
+Content-Type: application/json
+X-Correlation-ID: test-{{$timestamp}}
+
+{
+  "serverUrl": "https://www.cloudflare.com"
+}
+
+###
+
+### Test File Download (for testing download speed)
+GET http://localhost:5299/api/v1/speed/test-file
+Accept: application/octet-stream
+X-Correlation-ID: test-{{$timestamp}}
+
+###
+
+### Swagger UI
+GET http://localhost:5299/swagger
+Accept: text/html
+
+###
+
+### Swagger JSON
+GET http://localhost:5299/swagger/v1/swagger.json
+Accept: application/json
+
+###
+
+### Test with different correlation IDs
+### Test 1
+GET http://localhost:5299/api/v1/speed/servers
+Accept: application/json
+X-Correlation-ID: test-ping-001
+
+###
+
+### Test 2
+GET http://localhost:5299/api/v1/speed/servers
+Accept: application/json
+X-Correlation-ID: test-ping-002
+
+###
+
+### Test 3
+GET http://localhost:5299/api/v1/speed/servers
+Accept: application/json
+X-Correlation-ID: test-ping-003
+
+###
+
+### Performance Test - Multiple Ping Requests
+### Test 1
+POST http://localhost:5299/api/v1/speed/ping
+Content-Type: application/json
+X-Correlation-ID: perf-test-001
+
+{
+  "host": "8.8.8.8"
+}
+
+###
+
+### Test 2
+POST http://localhost:5299/api/v1/speed/ping
+Content-Type: application/json
+X-Correlation-ID: perf-test-002
+
+{
+  "host": "1.1.1.1"
+}
+
+###
+
+### Test 3
+POST http://localhost:5299/api/v1/speed/ping
+Content-Type: application/json
+X-Correlation-ID: perf-test-003
+
+{
+  "host": "9.9.9.9"
+}
+
+###
+
+### Test 4
+POST http://localhost:5299/api/v1/speed/ping
+Content-Type: application/json
+X-Correlation-ID: perf-test-004
+
+{
+  "host": "208.67.222.222"
+}
+
+###
+
+### Test 5
+POST http://localhost:5299/api/v1/speed/ping
+Content-Type: application/json
+X-Correlation-ID: perf-test-005
+
+{
+  "host": "8.8.4.4"
+}
+
+###
+
+### Error Testing
+### Invalid JSON
+POST http://localhost:5299/api/v1/speed/ping
+Content-Type: application/json
+X-Correlation-ID: error-test-001
+
+{
+  "host": "invalid-json
+}
+
+###
+
+### Missing required field
+POST http://localhost:5299/api/v1/speed/ping
+Content-Type: application/json
+X-Correlation-ID: error-test-002
+
+{
+  "invalidField": "test"
+}
+
+###
+
+### Empty request body
+POST http://localhost:5299/api/v1/speed/ping
+Content-Type: application/json
+X-Correlation-ID: error-test-003
+
+{
+
+}
+
+###
+
+### Wrong content type
+POST http://localhost:5299/api/v1/speed/ping
+Content-Type: text/plain
+X-Correlation-ID: error-test-004
+
+host=8.8.8.8
+
+###
+
+### Test with very long correlation ID
+GET http://localhost:5299/api/v1/speed/servers
+Accept: application/json
+X-Correlation-ID: very-long-correlation-id-that-should-still-work-properly-and-not-cause-any-issues-with-the-api-{{$timestamp}}
+
+###
+
+### Test with special characters in correlation ID
+GET http://localhost:5299/api/v1/speed/servers
+Accept: application/json
+X-Correlation-ID: test-special-chars-!@#$%^&*()_+-=[]{}|;':",./<>?{{$timestamp}}
+
+###
+
+### Test with Unicode in correlation ID
+GET http://localhost:5299/api/v1/speed/servers
+Accept: application/json
+X-Correlation-ID: test-unicode-测试-🚀-{{$timestamp}}
+
+###
+
+### Test with empty correlation ID (should generate one)
+GET http://localhost:5299/api/v1/speed/servers
+Accept: application/json
+X-Correlation-ID: 
+
+###
+
+### Test without correlation ID header (should generate one)
+GET http://localhost:5299/api/v1/speed/servers
+Accept: application/json
+
+###
+
+### Load Testing - Multiple concurrent requests
+### Request 1
+GET http://localhost:5299/healthz
+Accept: application/json
+X-Correlation-ID: load-test-001
+
+###
+
+### Request 2
+GET http://localhost:5299/healthz
+Accept: application/json
+X-Correlation-ID: load-test-002
+
+###
+
+### Request 3
+GET http://localhost:5299/healthz
+Accept: application/json
+X-Correlation-ID: load-test-003
+
+###
+
+### Request 4
+GET http://localhost:5299/healthz
+Accept: application/json
+X-Correlation-ID: load-test-004
+
+###
+
+### Request 5
+GET http://localhost:5299/healthz
+Accept: application/json
+X-Correlation-ID: load-test-005
+
+###
+
+### Request 6
+GET http://localhost:5299/healthz
+Accept: application/json
+X-Correlation-ID: load-test-006
+
+###
+
+### Request 7
+GET http://localhost:5299/healthz
+Accept: application/json
+X-Correlation-ID: load-test-007
+
+###
+
+### Request 8
+GET http://localhost:5299/healthz
+Accept: application/json
+X-Correlation-ID: load-test-008
+
+###
+
+### Request 9
+GET http://localhost:5299/healthz
+Accept: application/json
+X-Correlation-ID: load-test-009
+
+###
+
+### Request 10
+GET http://localhost:5299/healthz
+Accept: application/json
+X-Correlation-ID: load-test-010
+
+###
